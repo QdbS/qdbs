@@ -50,9 +50,9 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                  $r = $db->_sql($sql);
                  $row = $db->fetch_row($r);
                  if (ini_get("magic_quotes_runtime") or ini_get("magic_quotes_gpc")) {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (id,quote,rating) VALUES ('NULL', '".$db->escape(stripslashes($row['quote']))."', '0')";
+                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (id,quote,rating) VALUES (NULL, '".$db->escape(stripslashes($row['quote']))."', '0')";
                  } else {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (id,quote,rating) VALUES ('NULL', '".$db->escape($row['quote'])."', '0')";
+                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (id,quote,rating) VALUES (NULL, '".$db->escape($row['quote'])."', '0')";
                  }
                  $r = $db->_sql($sql);
                  $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id='".$db->escape($_GET['q'])."'";
@@ -150,7 +150,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 if ($row['level'] == '2') {
                     $username = strtolower($_POST['username']);
                     $password = strtolower(md5((isset($_POST['u_password']) ? $_POST['u_password'] : "")));
-                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip,id) VALUES ('".$db->escape($username)."', '".$db->escape($password)."', 'NULL', 'NULL')";
+                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip,id) VALUES ('".$db->escape($username)."', '".$db->escape($password)."', NULL, NULL)";
                     $r = $db->_sql($sql);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
