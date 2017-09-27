@@ -1,5 +1,11 @@
 QdbS Changelog:
 
+[ 1.* ] - ??/??/???? (mm/dd/yyyy)
+Fix for incorrect error handling of mysqli_connect in install script
+Fix for issue adding intial admin during install
+Fix for issue adding quote
+Added a little better error handling
+
 [ 1.12 ] - 09/27/2017 (mm/dd/yyyy)
 Changed mysql_*() to mysqli_*()
 
