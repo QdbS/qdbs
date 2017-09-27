@@ -150,7 +150,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 if ($row['level'] == '2') {
                     $username = strtolower($_POST['username']);
                     $password = strtolower(md5((isset($_POST['u_password']) ? $_POST['u_password'] : "")));
-                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip,id) VALUES ('".$db->escape($username)."', '".$db->escape($password)."', NULL, NULL)";
+                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip,id) VALUES ('".$db->escape($username)."', '".$db->escape($password)."', '', NULL)";
                     $r = $db->_sql($sql);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
