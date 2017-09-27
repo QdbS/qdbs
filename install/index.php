@@ -111,7 +111,7 @@ if (!empty($_POST['do'])) {
               '".strtolower(md5($_POST['i_password']))."',
               '2',
               '',
-              'NULL'
+              NULL
             )") or die (mysqli_error($db));
 
             @mysqli_query($db, "INSERT INTO " . $_POST['i_tableprefix'] . "settings VALUES (
@@ -130,8 +130,8 @@ if (!empty($_POST['do'])) {
 			$settings .= '$_qdbs[\'tpfx\'] = \''.$_POST['i_tableprefix'].'\';'."\n";
    			$settings .= 'define(\'INSTALLED\', true);'."\n";
    			$settings .= '?'.'>';
-            
-            #chmod('../settings.php', 0666);          
+
+            #chmod('../settings.php', 0666);
             if (!($fp = @fopen('../settings.php', 'w'))) {
                 $tpl->set('error', '<b>ERROR</b>: cannot open settings.php!<br>');
                 print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
