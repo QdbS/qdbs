@@ -192,7 +192,7 @@ class QdbS_Database {
 
     function _sql($sql) {
         if (!$this->result = mysqli_query($this->link, $sql)) {
-            trigger_error("Database::_sql(); -> Query error: ", E_USER_ERROR);
+            trigger_error("Database::_sql(); -> Query error: " . mysqli_error($this->link), E_USER_ERROR);
         }
         $this->q_count++;
         return $this->result;
