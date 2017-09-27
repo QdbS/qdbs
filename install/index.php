@@ -44,8 +44,8 @@ if (!empty($_POST['do'])) {
         $tpl->set('error', 'please fill in all required fields.<br>');
     }
     if ($allclear = TRUE) {
-        if (!($db = @mysqli_connect($_POST['i_server'], $_POST['i_username'], $_POST['i_password']))) {
-            $tpl->set('error', 'Error while connecting: '.mysqli_error($db).'<br>');
+        if (($db = @mysqli_connect($_POST['i_server'], $_POST['i_username'], $_POST['i_password'])) === FALSE) {
+            $tpl->set('error', 'Error while connecting: '.mysqli_connect_error().'<br>');
         } else {
             if ($_POST['i_type'] == 'script') {
 	            $sql = 'CREATE DATABASE IF NOT EXISTS '.$_POST['i_database'];
@@ -112,7 +112,7 @@ if (!empty($_POST['do'])) {
               '2',
               '',
               'NULL'
-            )");
+            )") or die (mysqli_error($db));
 
             @mysqli_query($db, "INSERT INTO " . $_POST['i_tableprefix'] . "settings VALUES (
               '".$_POST['i_template']."',
@@ -120,7 +120,7 @@ if (!empty($_POST['do'])) {
               '".$_POST['i_heading']."',
               '".$_POST['i_title']."',
               '".$_POST['i_style']."'
-            )");
+            )") or die (mysqli_error($db));
 
             $settings = '<?php'."\n// Generated settings file, DO NOT EDIT!\n\n";
 			$settings .= '$_qdbs[\'server\'] = \''.$_POST['i_server'].'\';'."\n";
