@@ -1,0 +1,43 @@
+a:link    { text-decoration: none; color: #444444 }
+a:visited { text-decoration: none; color: #444444 }
+a:active  { text-decoration: none; color: #444444 }
+a:hover   { text-decoration: none; color: #999999 }
+
+body {
+    Font-Family: Verdana;
+    Color: #000000;
+    Font-Size: 8pt;
+    Text-Decoration: none;
+    Background-Color: #FFFFFF;
+    Margin-Top: 0px;
+    Margin-Left: 0px;
+    Margin-Right: 0px;
+    Margin-Bottom: 0px;
+}
+
+.body {
+    Font-Family: Verdana;
+    Color: #000000;
+    Font-Size: 8pt;
+    Text-Decoration: none;
+}
+
+.salty {
+    Font-Family: Verdana;
+    Color: #555555;
+    Font-Size: 10pt;
+    Letter-Spacing: -1px;
+    Text-Decoration: none;
+}
+
+.heading {
+    Font-Family: Verdana;
+    Color: #CCCCCC;
+    Font-Size: 30pt;
+    Font-Weight: Bold;
+    Text-Decoration: none;
+}
+
+ul li {
+    margin: 0 0 10px 0;
+}

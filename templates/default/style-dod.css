@@ -1,0 +1,160 @@
+/*
+ * CSS File
+ *
+ * Author: Kyle Florence
+ * Contact: kaf486 (at) longwood (dot) edu
+ *
+ * Last Update: 02.15.05
+ *
+ */
+
+/********************
+
+  links
+
+********************/
+
+a:link,
+a:visited,
+a:active {
+  color: #BED7AF;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #BED7AF;
+}
+
+/********************
+
+  outside / global
+
+********************/
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #000;
+  background: #C0BDAE;
+  font: 11px verdana, arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 10px 0;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  border-bottom: #BED7AF 1px solid;
+}
+
+h2 {
+  margin: 0;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+p {
+  margin: 0;
+  padding: 10px;
+  line-height: 17px;
+}
+
+
+/********************
+
+  major sections
+
+********************/
+
+#containment {
+  margin: 10px auto;
+  padding: 0;
+  width: 750px;
+  background: #7D6D3A;
+  text-align: left;
+}
+
+#content {
+  margin: 0;
+  padding: 10px;
+  float: left;
+  width: 420px;
+}
+
+#header {
+  margin: 0;
+  padding: 10px;
+  height: 100px;
+  color: #fff;
+  background: #3E5230;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#header span {
+  margin: 0 0 -19px 2px;
+  padding: 0;
+  color: #4D6B39;
+  display: block;
+}
+
+/********************
+
+  side stuff
+
+********************/
+
+#list {
+  margin: 0 0 0 550px;
+  padding: 5px;
+  position: relative;
+  background: #fff;
+}
+
+#list ul {
+  margin: 0;
+  padding: 0 0 0 25px;
+}
+
+#list ul li {
+  margin: 0;
+  padding: 3px 0;
+  color: #BED7AF;
+  list-style: square;
+  list-style-position: outside;
+  list-style-image: url(arrow.gif);
+}
+
+/********************
+
+  footer
+
+********************/
+
+#footer a:link,
+#footer a:visited,
+#footer a:active {
+  color: #4D6B39;
+  text-decoration: none;
+}
+
+#footer a:hover {
+  color: #000;
+}
+
+#footer {
+  clear: both;
+  margin: 0;
+  padding: 10px;
+  color: #000;
+  background: #3E5230;
+  text-align: center;
+}
+
+#footer p {
+  margin: 0;
+  padding: 0;
+}
+

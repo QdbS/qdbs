@@ -1,0 +1,53 @@
+QdbS Changelog:
+
+[ 1.12 ] - 09/27/2017 (mm/dd/yyyy)
+Changed mysql_*() to mysqli_*()
+
+[ 1.11 ] - 06/05/2012 (mm/dd/yyyy)
+Updated the version number in doc/index.html
+Added "randomquote" page to display a single random quote
+Changed class names in classes.php
+Fixed warnings caused by unquoted array indexes
+Fixed warnings caused by non-existant array indexes
+
+[ 1.10 ] - 08/29/2008 (mm/dd/yyyy)
+Fixed install ussue where MySQL username with upper case letters would prevent initial login
+Fixed bug where on some installations " and ' were getting escaped
+
+[ 1.09 ] - 03/28/2008 (mm/dd/yyyy)
+Added proper support for case sensitive passwords
+Fixed case inconsistancy in MD5 hash comparison (Thanks to Se7enLC)
+
+[ 1.08 ] - 01/27/2008 (mm/dd/yyyy)
+No longer requires PHP's short tags to be enabled (<? instead of <?php)
+Templates changed to reflect above change
+
+[ 1.07 ] - 01/18/2008 (mm/dd/yyyy)
+Fixed \'s being removed from quotes.
+
+[ 1.06 ] - 12/21/2007 (mm/dd/yyyy)
+Added support for table prefixes (Thanks to Thomas Ward)
+Replaced config variables with a better naming scheme (Idea by Thomas Ward)
+
+[ 1.05 ] - 11/24/2007 (mm/dd/yyyy)
+Removed pagination from search (missed in previous release)
+Added support for query based search. Eg: /?do=search&q={searchterms}
+
+[ 1.04 ] - 10/13/2007 (mm/dd/yyyy)
+Added some additional protection to prevent SQL injection.
+Set pageination to only list pages on browse page.
+Fixed issue preventing removal of admins.
+Fixed installer where it would not create the database even if the MySQL user has permission to
+
+[ 1.03 ] - 10/05/2007 (mm/dd/yyyy)
+Released code under GNU General Public License for further development from others.
+
+[ 1.02 ] - 01/05/2004 (mm/dd/yyyy)
+Misc. bugs fixed including adding quotes and template issues.
+The database system has been reworked, added row and query counts.
+
+[ 1.01 ] - 10/12/2003 (mm/dd/yyyy)
+Misc. bugs fixed, minor updates.
+
+[ 1.00 ] - 09/26/2003 (mm/dd/yyyy)
+Initial release

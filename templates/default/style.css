@@ -1,0 +1,72 @@
+a:link    { text-decoration: none; color: #314F7C      }
+a:visited { text-decoration: none; color: #314F7C      }
+a:active  { text-decoration: none; color: #314F7C      }
+a:hover   { text-decoration: underline; color: #314F7C }
+
+body {
+    Font-Family: Verdana;
+    Color: #000000;
+    Font-Size: 8pt;
+    Text-Decoration: none;
+    Background-Color: #FFFFFF;
+    Margin-Top: 0px;
+    Margin-Left: 0px;
+    Margin-Right: 0px;
+    Margin-Bottom: 0px;
+}
+
+.small {
+    Font-Family: Verdana;
+    Color: #000000;
+    Font-Size: 8pt;
+    Text-Decoration: none;
+}
+
+.border {
+    Font-Family: Verdana;
+    Color: #000000;
+    Font-Size: 8pt;
+    Text-Decoration: none;
+    Background-Color: #EEEEEE;
+    Border: #BBBBBB 1px solid;
+}
+
+.salty {
+    Font-Family: Verdana;
+    Color: #555555;
+    Font-Size: 10pt;
+    Letter-Spacing: -1px;
+    Text-Decoration: none;
+}
+
+.heading {
+    Font-Family: Verdana;
+    Color: #000000;
+    Font-Size: 30pt;
+    Font-Weight: Bold;
+    Text-Decoration: none;
+}
+
+.title {
+    Font-Family: Verdana;
+    Color: #314F7C;
+    Font-Size: 8pt;
+    Font-Weight: bold;
+    Text-Decoration: none;
+}
+
+.body {
+    Font-Family: Verdana;
+    Color: #444444;
+    Font-Size: 8pt;
+    Text-Decoration: none;
+}
+
+.form {
+    Font-Family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    Color: #000000;
+    Font-Size: 8pt;
+    Text-Decoration: none;
+    Background-Color: #F4F4F4;
+    Border: #BBBBBB 1px solid;
+}

@@ -1,0 +1,176 @@
+/*
+ * CSS File
+ *
+ * Author: Kyle Florence
+ * Contact: kaf486 (at) longwood (dot) edu
+ *
+ * Last Update: 02.15.05
+ *
+ */
+
+/********************
+
+  links
+
+********************/
+
+a:link,
+a:visited,
+a:active {
+  color: #BED7AF;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #BED7AF;
+}
+
+/********************
+
+  outside / global
+
+********************/
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #333;
+  background: #C0BDAE;
+  font: 11px verdana, arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 10px 0;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  border-bottom: #ddd 1px solid;
+}
+
+h2 {
+  margin: 0;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+p {
+  margin: 0;
+  padding: 10px;
+  line-height: 17px;
+}
+
+img {
+  margin: 0;
+  padding: 0;
+  border: #000 1px solid;
+}
+
+.img {
+  margin: 10px auto;
+  padding: 10px;
+  text-align: center;
+  display: table;
+  background: #f4f4f4;
+  border: #ddd 1px solid;
+}
+
+
+/********************
+
+  major sections
+
+********************/
+
+#containment {
+  margin: 10px auto;
+  padding: 0;
+  width: 750px;
+  background: #7D6D3A;
+  border: #45485D 1px solid;
+  text-align: left;
+}
+
+#content {
+  margin: 0;
+  padding: 10px;
+  float: left;
+  width: 380px;
+}
+
+#header {
+  margin: 0;
+  padding: 10px;
+  height: 100px;
+  color: #fff;
+  background: #3E5230;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#header span {
+  margin: 0 0 -19px 2px;
+  padding: 0;
+  color: #4D6B39;
+  display: block;
+}
+
+/********************
+
+  side stuff
+
+********************/
+
+#list {
+  margin: 0 0 0 400px;
+  padding: 5px;
+  position: relative;
+}
+
+#list ul {
+  margin: 0;
+  padding: 0 0 0 25px;
+}
+
+#list ul li {
+  margin: 0;
+  padding: 3px 0;
+  color: #BED7AF;
+  list-style: square;
+  list-style-position: outside;
+  list-style-image: url(arrow.gif);
+}
+
+/********************
+
+  footer
+
+********************/
+
+#footer a:link,
+#footer a:visited,
+#footer a:active {
+  color: #4D6B39;
+  text-decoration: none;
+}
+
+#footer a:hover {
+  color: #000;
+}
+
+#footer {
+  clear: both;
+  margin: 0;
+  padding: 10px;
+  color: #777;
+  background: #3E5230;
+  border-top: #ddd 1px solid;
+  text-align: center;
+}
+
+#footer p {
+  margin: 0;
+  padding: 0;
+}
+
