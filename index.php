@@ -69,9 +69,9 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     if ((!empty($_POST['q']) || !empty($_GET['q'])) && ((!empty($_GET['p']) && ($_GET['p'] == 'search')) || (!empty($_GET['do']) && ($_GET['do'] == 'search'))) ) {
         print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
         if ( !empty($_POST['q']) ) {
-	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE quote LIKE '%".$db->escape($_POST['q'])."%' LIMIT ".intval($start).", ".intval($pgr->limit);
+	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE quote LIKE '%".$db->escape($_POST['q'])."%' LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
         } else {
-	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE quote LIKE '%".$db->escape($_GET['q'])."%' LIMIT ".intval($start).", ".intval($pgr->limit);
+	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE quote LIKE '%".$db->escape($_GET['q'])."%' LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
         }
         $r = $db->_sql($sql);
         if ($db->_rows($r) > 0) {
@@ -127,7 +127,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
         }
         switch ($_GET['p']) {
             case 'top':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating DESC LIMIT ".intval($start).", ".intval($pgr->limit);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating DESC LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
@@ -147,7 +147,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'bottom':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating ASC LIMIT ".intval($start).", ".intval($pgr->limit);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating ASC LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
@@ -167,7 +167,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'latest':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id DESC LIMIT ".intval($start).", ".intval($pgr->limit);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id DESC LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
@@ -187,7 +187,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'random':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY RAND() LIMIT ".intval($start).", ".intval($pgr->limit);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY RAND() LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
@@ -207,7 +207,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'random1':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE rating>0 ORDER BY RAND() LIMIT ".intval($start).", ".intval($pgr->limit);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE rating>0 ORDER BY RAND() LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
@@ -247,7 +247,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'browse':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id LIMIT ".intval($start).", ".intval($pgr->limit);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);

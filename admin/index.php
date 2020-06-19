@@ -260,7 +260,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 print($tpl->fetch('.'.$tpl->tdir.'admin_settings_1.tpl'));
             }
         } else {
-            $sql = "SELECT * FROM ".$_qdbs['tpfx']."queue ORDER BY id DESC LIMIT ".intval($start).", ".intval($pgr->limit);
+            $sql = "SELECT * FROM ".$_qdbs['tpfx']."queue ORDER BY id DESC LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
             $r = $db->_sql($sql);
             if($db->_rows($r) > 0) {
                 while ($row = $db->fetch_row($r)) {
