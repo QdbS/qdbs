@@ -2,6 +2,7 @@ QdbS Changelog:
 
 [ ?.?? ] - ??/??/???? (mm/dd/yyyy)
 Changed changed the syntax of some SQL queries to use LIMIT and OFFSET instead of just LIMIT
+Changed some SQL queries to not use NULL for id fields in INSERTs
 
 [ 1.13 ] - 06/19/2020 (mm/dd/yyyy)
 Fix for incorrect error handling of mysqli_connect in install script
