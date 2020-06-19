@@ -75,7 +75,7 @@ if (defined('INSTALLED')) {
     $tpl->set('p', '0');
     $tpl->set('q_count', '0');
     $tpl->set('r_count', '0');
-    $tpl->set('version', '1.02');
+    $tpl->set('version', 'unknown');
 }
 
 class QdbS_Pager {
