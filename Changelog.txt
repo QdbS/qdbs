@@ -1,6 +1,6 @@
 QdbS Changelog:
 
-[ 1.* ] - ??/??/???? (mm/dd/yyyy)
+[ 1.13 ] - 06/19/2020 (mm/dd/yyyy)
 Fix for incorrect error handling of mysqli_connect in install script
 Fix for issue adding intial admin during install
 Fix for issue adding quote

@@ -53,7 +53,7 @@ if (defined('INSTALLED')) {
     $p = $db->fetch_row($db->_sql($sql))[0];
     $tpl->set('t', $t);
     $tpl->set('p', $p);
-    $tpl->set('version', '1.12');
+    $tpl->set('version', '1.13');
     if(!isset($_SESSION['loggedin']) && isset($_COOKIE['qdb_username']) && isset($_COOKIE['qdb_password'])) {
         $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape(strtolower($_COOKIE['qdb_username']))."' LIMIT 1";
         $r = $db->_sql($sql);
