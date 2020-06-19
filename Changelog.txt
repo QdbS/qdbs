@@ -6,6 +6,8 @@ Fix for issue adding intial admin during install
 Fix for issue adding quote
 Fix for quote approval and admin addition not working due to incorrect NULL in SQL query
 Added a little better error handling
+Moved remaining mysqli_*() functions to classes.php
+Removed blank settings.php
 
 [ 1.12 ] - 09/27/2017 (mm/dd/yyyy)
 Changed mysql_*() to mysqli_*()
