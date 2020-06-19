@@ -46,7 +46,7 @@ if (!empty($_POST['do'])) {
 	}
 	if ($allclear = TRUE) {
 		if ($_POST['i_dbtype'] == "pgsql") {
-			$connstr = sprintf("host=%s dbname=%s username=%s password=%s", $_POST['i_server'], $_POST['i_database'], $_POST['i_username'], $_POST['i_password']);
+			$connstr = sprintf("host=%s dbname=%s user=%s password=%s", $_POST['i_server'], $_POST['i_database'], $_POST['i_username'], $_POST['i_password']);
 			if (($db = @pg_connect($connstr)) === FALSE) {
 				$tpl->set('error', 'Error while connecting to PostgreSQL<br>');
 			} else {
