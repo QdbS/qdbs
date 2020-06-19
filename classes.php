@@ -30,7 +30,11 @@ if ((@include("settings.php")) === false) {
 		exit;
 	}
 }
-$db = new QdbS_Database();
+if (isset($_qdbs['dbtype']) and $_qdbs['dbtype'] == 'pgsql') {
+	$db = new QdbS_Database_PgSQL();
+} else {
+	$db = new QdbS_Database_MySQL();
+}
 $pgr = new QdbS_Pager();
 $tpl = new QdbS_Template();
 $ip = getenv("REMOTE_ADDR");
@@ -168,13 +172,14 @@ class QdbS_Template {
     }
 }
 
-class QdbS_Database {
+class QdbS_Database_MySQL {
     var $query;
     var $link;
     var $result;
     var $row;
     var $q_count = 0;
     var $r_count = 0;
+	var $rand = "RAND()";
 
     function __construct() {
         $this->clear();
@@ -191,13 +196,13 @@ class QdbS_Database {
 
     function _connect($servername, $username, $password, $name) {
         if (!$this->link = mysqli_connect($servername, $username, $password, $name)) {
-            trigger_error("QdbS_Database::_connect(); -> Error retreiving information!", E_USER_ERROR);
+            trigger_error("QdbS_Database_MySQL::_connect(); -> Error retreiving information!", E_USER_ERROR);
         }
     }
 
     function _sql($sql) {
         if (!$this->result = mysqli_query($this->link, $sql)) {
-            trigger_error("QdbS_Database::_sql(); -> Query error: " . mysqli_error($this->link), E_USER_ERROR);
+            trigger_error("QdbS_Database_MySQL::_sql(); -> Query error: " . mysqli_error($this->link), E_USER_ERROR);
         }
         $this->q_count++;
         return $this->result;
@@ -215,6 +220,59 @@ class QdbS_Database {
 
 	function escape($string) {
 		return mysqli_real_escape_string($this->link, $string);
+	}
+}
+
+class QdbS_Database_PgSQL {
+	var $query;
+	var $link;
+	var $result;
+	var $row;
+	var $q_count = 0;
+	var $r_count = 0;
+	var $rand = "RANDOM()";
+
+	function __construct() {
+		$this->clear();
+	}
+
+	function clear() {
+		$this->query = null;
+		$this->link = null;
+		$this->result = null;
+		$this->row = null;
+		$this->q_count = 0;
+		$this->r_count = 0;
+	}
+
+	function _connect($servername, $username, $password, $name) {
+		$connstr = sprintf("host=%s dbname=%s user=%s password=%s", $servername, $name, $username, $password);
+		if (!$this->link = pg_connect($connstr)) {
+			trigger_error("QdbS_Database_PgSQL::_connect(); -> Error retreiving information!", E_USER_ERROR);
+		}
+	}
+
+	function _sql($sql) {
+		if (!$this->result = pg_query($this->link, $sql)) {
+			print($sql);
+			trigger_error("QdbS_Database_PgSQL::_sql(); -> Query error: " . pg_last_error($this->link), E_USER_ERROR);
+		}
+		$this->q_count++;
+		return $this->result;
+	}
+
+	function _rows($result) {
+		return pg_num_rows($result);
+	}
+
+	function fetch_row($result) {
+		$this->row = @pg_fetch_array($result);
+		$this->r_count++;
+		return $this->row;
+	}
+
+	function escape($string) {
+		return pg_escape_string($this->link, $string);
 	}
 }
 ?>

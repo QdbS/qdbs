@@ -187,7 +187,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'random':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY RAND() LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY ".$db->rand." LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
@@ -207,7 +207,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'random1':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE rating>0 ORDER BY RAND() LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE rating>0 ORDER BY ".$db->rand." LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
@@ -227,7 +227,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'randomquote':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY RAND() LIMIT 1";
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY ".$db->rand." LIMIT 1";
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);

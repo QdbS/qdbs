@@ -6,7 +6,8 @@
               </tr>
               <tr>
                 <td width="100%" align="left" class="body">
-                  *Installation type: Use script unless it gives you errors, if you get errors, read the <a href="../doc/">docs</a>!<br>
+                  *Create Database (MySQL Only): Select yes to create the database if it doesn't already exist, if you get errors, read the <a href="../doc/">docs</a>!<br>
+                  *Database Type: The database server type.<br>
                   *Database Username: The username you use to connect to your database.<br>
                   *Database Password: The password you use to connect to your database.<br>
                   *Database Name: The name of your database. (script installation will attempt to create this for you)<br>
@@ -18,7 +19,8 @@
                 <td class="body">
                   <form action="./index.php" name="install" method="POST">
                     <input type="hidden" name="do" value="install">
-                    Installation Type:<br><select name="i_type" class="form"><option value="script" selected>Script<option value="manual">Manual</select><br>
+                    Create Database (MySQL Only):<br><select name="i_type" class="form"><option value="script" selected>Yes</option><option value="manual">No</option></select><br>
+                    Database Type:<br><select name="i_dbtype" class="form"><option value="mysql" selected>MySQL</option><option value="pgsql">PostgreSQL</option></select><br>
                     Database Username:<br><input type="text" name="i_username" size="20" maxlength="16" class="form"><br>
                     Database Password:<br><input type="password" name="i_password" size="20" maxlength="16" class="form"><br>
                     Database Name:<br><input type="text" name="i_database" size="20" maxlength="20" value="qdb" class="form"><br>
