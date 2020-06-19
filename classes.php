@@ -37,7 +37,7 @@ $ip = getenv("REMOTE_ADDR");
 $ip = gethostbyaddr($ip);
 $ref = (!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "");
 if (defined('INSTALLED')) {
-    $db->__connect($_qdbs['server'], $_qdbs['user'], $_qdbs['password'], $_qdbs['db']);
+    $db->_connect($_qdbs['server'], $_qdbs['user'], $_qdbs['password'], $_qdbs['db']);
     $sql = "SELECT * FROM ".$_qdbs['tpfx']."settings";
     $r = $db->_sql($sql);
     $row = $db->fetch_row($r);
@@ -176,7 +176,7 @@ class QdbS_Database {
     var $q_count = 0;
     var $r_count = 0;
 
-    function Database() {
+    function __construct() {
         $this->clear();
     }
 
@@ -189,15 +189,15 @@ class QdbS_Database {
         $this->r_count = 0;
     }
 
-    function __connect($servername, $username, $password, $name) {
+    function _connect($servername, $username, $password, $name) {
         if (!$this->link = mysqli_connect($servername, $username, $password, $name)) {
-            trigger_error("Database::sql_query(); -> Error retreiving information!", E_USER_ERROR);
+            trigger_error("QdbS_Database::_connect(); -> Error retreiving information!", E_USER_ERROR);
         }
     }
 
     function _sql($sql) {
         if (!$this->result = mysqli_query($this->link, $sql)) {
-            trigger_error("Database::_sql(); -> Query error: " . mysqli_error($this->link), E_USER_ERROR);
+            trigger_error("QdbS_Database::_sql(); -> Query error: " . mysqli_error($this->link), E_USER_ERROR);
         }
         $this->q_count++;
         return $this->result;

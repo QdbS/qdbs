@@ -8,6 +8,7 @@ Fix for quote approval and admin addition not working due to incorrect NULL in S
 Added a little better error handling
 Moved remaining mysqli_*() functions to classes.php
 Removed blank settings.php
+Changed a couple of QdbS_Database class function names
 
 [ 1.12 ] - 09/27/2017 (mm/dd/yyyy)
 Changed mysql_*() to mysqli_*()
