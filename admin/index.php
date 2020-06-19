@@ -57,7 +57,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                  $r = $db->_sql($sql);
                  $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id='".$db->escape($_GET['q'])."'";
                  $r = $db->_sql($sql);
-                 
+
                  header ("Location: ".$ref);
                  break;
             case 'del':
@@ -67,7 +67,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                  }
                  $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id='".$db->escape($_GET['q'])."'";
                  $r = $db->_sql($sql);
-                 
+
                  header ("Location: ".$ref);
                  break;
             case 'remove':
@@ -82,7 +82,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      $sql = "DELETE FROM ".$_qdbs['tpfx']."admins WHERE id='".$db->escape($_GET['id'])."'";
                      $r = $db->_sql($sql);
                  }
-                 
+
                  header ("Location: ".$ref);
                  break;
             case 'raise':
@@ -102,7 +102,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                          $r = $db->_sql($sql);
                      }
                  }
-                 
+
                  header ("Location: ".$ref);
                  break;
             case 'lower':
@@ -122,7 +122,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                          $r = $db->_sql($sql);
                      }
                  }
-                 
+
                  header ("Location: ".$ref);
                  break;
             case 'logout':
@@ -262,7 +262,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
         } else {
             $sql = "SELECT * FROM ".$_qdbs['tpfx']."queue ORDER BY id DESC LIMIT ".intval($start).", ".intval($pgr->limit);
             $r = $db->_sql($sql);
-            if(mysqli_num_rows($r) > 0) {
+            if($db->_rows($r) > 0) {
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('quote', $row['quote']);
@@ -276,7 +276,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     } else {
         print($tpl->fetch('.'.$tpl->tdir.'admin_login.tpl'));
     }
-    
+
     // Footer
     $tpl->set('q_count', $db->q_count);
     $tpl->set('r_count', $db->r_count);

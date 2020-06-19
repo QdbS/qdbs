@@ -198,6 +198,10 @@ class QdbS_Database {
         return $this->result;
     }
 
+	function _rows($result) {
+		return mysqli_num_rows($result);
+	}
+
     function fetch_row($result) {
         $this->row = @mysqli_fetch_array($result);
         $this->r_count++;

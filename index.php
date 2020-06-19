@@ -74,7 +74,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE quote LIKE '%".$db->escape($_GET['q'])."%' LIMIT ".intval($start).", ".intval($pgr->limit);
         }
         $r = $db->_sql($sql);
-        if (mysqli_num_rows($r) > 0) {
+        if ($db->_rows($r) > 0) {
             while ($row = $db->fetch_row($r)) {
                 $tpl->set('q_id', $row['id']);
                 $tpl->set('q_rating', $row['rating']);
@@ -93,7 +93,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
         } else {
             print($tpl->fetch($tpl->tdir.'quote_no_results.tpl'));
         }
-        
+
         print($tpl->fetch($tpl->tdir.'layout_footer.tpl'));
     }
     if (!empty($_POST['do'])) {
@@ -120,7 +120,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 } else {
     // Header
     print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
-    
+
     if (!empty($_GET['p'])) {
         if ( $_GET['p'] == 'browse' ) {
             print($tpl->fetch($tpl->tdir.'page_list.tpl'));
@@ -144,7 +144,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     }
                     print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
                 }
-                
+
                 break;
             case 'bottom':
                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating ASC LIMIT ".intval($start).", ".intval($pgr->limit);
@@ -164,7 +164,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     }
                     print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
                 }
-                
+
                 break;
             case 'latest':
                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id DESC LIMIT ".intval($start).", ".intval($pgr->limit);
@@ -184,7 +184,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     }
                     print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
                 }
-                
+
                 break;
             case 'random':
                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY RAND() LIMIT ".intval($start).", ".intval($pgr->limit);
@@ -204,7 +204,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     }
                     print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
                 }
-                
+
                 break;
             case 'random1':
                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE rating>0 ORDER BY RAND() LIMIT ".intval($start).", ".intval($pgr->limit);
@@ -224,7 +224,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     }
                     print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
                 }
-                
+
                 break;
             case 'randomquote':
                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY RAND() LIMIT 1";
@@ -264,7 +264,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     }
                     print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
                 }
-                
+
                 break;
             case 'search':
                 print($tpl->fetch($tpl->tdir.'quote_search.tpl'));
@@ -287,7 +287,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
         }
         $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE id='".$db->escape($id)."' LIMIT 1";
         $r = $db->_sql($sql);
-        if (mysqli_num_rows($r) > 0) {
+        if ($db->_rows($r) > 0) {
             $row = $db->fetch_row($r);
             $tpl->set('q_id', $row['id']);
             $tpl->set('q_rating', $row['rating']);
@@ -310,7 +310,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     } else {
         print($tpl->fetch($tpl->tdir.'layout_main.tpl'));
     }
-    
+
     // Footer
     $tpl->set('q_count', $db->q_count);
     $tpl->set('r_count', $db->r_count);
