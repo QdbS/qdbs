@@ -24,7 +24,12 @@
 
 ***************************************************************************/
 
-include("settings.php");
+if ((@include("settings.php")) === false) {
+	if (!defined('INSTALLER')) {
+		header("Location: ./install/");
+		exit;
+	}
+}
 $db = new QdbS_Database();
 $pgr = new QdbS_Pager();
 $tpl = new QdbS_Template();

@@ -24,6 +24,7 @@
 
 ***************************************************************************/
 
+define('INSTALLER', true);
 require("../classes.php");
 
 if (defined('INSTALLED')) {
