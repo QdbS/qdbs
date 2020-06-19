@@ -50,9 +50,9 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                  $r = $db->_sql($sql);
                  $row = $db->fetch_row($r);
                  if (ini_get("magic_quotes_runtime") or ini_get("magic_quotes_gpc")) {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (id,quote,rating) VALUES (NULL, '".$db->escape(stripslashes($row['quote']))."', '0')";
+                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (quote,rating) VALUES ('".$db->escape(stripslashes($row['quote']))."', '0')";
                  } else {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (id,quote,rating) VALUES (NULL, '".$db->escape($row['quote'])."', '0')";
+                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (quote,rating) VALUES ('".$db->escape($row['quote'])."', '0')";
                  }
                  $r = $db->_sql($sql);
                  $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id='".$db->escape($_GET['q'])."'";
@@ -98,7 +98,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      $r = $db->_sql($sql);
                      $row = $db->fetch_row($r);
                      if ($row['level'] < '2') {
-                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level+1 WHERE id='".$db->escape($_GET['id'])."' LIMIT 1";
+                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level+1 WHERE id='".$db->escape($_GET['id'])."'";
                          $r = $db->_sql($sql);
                      }
                  }
@@ -118,7 +118,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      $r = $db->_sql($sql);
                      $row = $db->fetch_row($r);
                      if ($row['level'] > '1') {
-                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level-1 WHERE id='".$db->escape($_GET['id'])."' LIMIT 1";
+                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level-1 WHERE id='".$db->escape($_GET['id'])."'";
                          $r = $db->_sql($sql);
                      }
                  }
@@ -150,7 +150,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 if ($row['level'] == '2') {
                     $username = strtolower($_POST['username']);
                     $password = strtolower(md5((isset($_POST['u_password']) ? $_POST['u_password'] : "")));
-                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip,id) VALUES ('".$db->escape($username)."', '".$db->escape($password)."', '', NULL)";
+                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip) VALUES ('".$db->escape($username)."', '".$db->escape($password)."', '')";
                     $r = $db->_sql($sql);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
@@ -166,7 +166,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 $r = $db->_sql($sql);
                 $row = $db->fetch_row($r);
                 if (($c_password == $row['password']) && ($c_password1 == $c_password2)) {
-                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET password='".$db->escape($c_password1)."' WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
+                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET password='".$db->escape($c_password1)."' WHERE username='".$db->escape($_COOKIE['qdb_username'])."'";
                     $r = $db->_sql($sql);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
@@ -210,7 +210,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 $r = $db->_sql($sql);
                 $row = $db->fetch_row($r);
                 if (strtolower($row['password']) == $password) {
-                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET ip='".$db->escape($ip)."' WHERE username='".$db->escape($username)."' LIMIT 1";
+                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET ip='".$db->escape($ip)."' WHERE username='".$db->escape($username)."'";
                     $r = $db->_sql($sql);
                     setcookie ('qdb_username', $username, time()+(3600*24*365), '/');
                     setcookie ('qdb_password', $password, time()+(3600*24*365), '/');

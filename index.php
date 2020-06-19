@@ -106,9 +106,9 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                  $quote = str_replace("  ", "&nbsp;&nbsp;", $quote);
                  $quote = nl2br($quote);
                  if (ini_get("magic_quotes_runtime") or ini_get("magic_quotes_gpc")) {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."queue (id,quote) VALUES (NULL, '".$db->escape(stripslashes($quote))."')";
+                      $sql = "INSERT INTO ".$_qdbs['tpfx']."queue (quote) VALUES ('".$db->escape(stripslashes($quote))."')";
                  } else {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."queue (id,quote) VALUES (NULL, '".$db->escape($quote)."')";
+                      $sql = "INSERT INTO ".$_qdbs['tpfx']."queue (quote) VALUES ('".$db->escape($quote)."')";
                  }
                  $r = $db->_sql($sql);
                  print($tpl->fetch($tpl->tdir.'layout_header.tpl'));

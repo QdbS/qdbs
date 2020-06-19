@@ -59,7 +59,7 @@ if (defined('INSTALLED')) {
         $r = $db->_sql($sql);
         $row = $db->fetch_row($r);
         if (($row['password'] == $_COOKIE['qdb_password']) and ($row['username'] == strtolower($_COOKIE['qdb_username']))) {
-            $sql = "UPDATE ".$_qdbs['tpfx']."admins SET ip='$ip' WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
+            $sql = "UPDATE ".$_qdbs['tpfx']."admins SET ip='$ip' WHERE username='".$db->escape($_COOKIE['qdb_username'])."'";
             $r = $db->_sql($sql);
             $_SESSION['loggedin'] = 'logged';
         }
