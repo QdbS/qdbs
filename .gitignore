@@ -1,3 +1,5 @@
 settings.php
 .htaccess
 install/.htaccess
+templates/*
+!templates/default
