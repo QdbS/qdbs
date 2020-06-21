@@ -275,4 +275,3 @@ class QdbS_Database_PgSQL {
 		return pg_escape_string($this->link, $string);
 	}
 }
-?>

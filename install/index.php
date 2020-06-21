@@ -244,4 +244,3 @@ if (!empty($_POST['do'])) {
 	print($tpl->fetch('.'.$tpl->tdir.'layout_install.tpl'));
 	print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
 }
-?>

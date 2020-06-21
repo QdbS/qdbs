@@ -282,5 +282,3 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     $tpl->set('r_count', $db->r_count);
     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
 }
-
-?>
