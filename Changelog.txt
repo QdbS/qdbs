@@ -5,6 +5,7 @@ Changed changed the syntax of some SQL queries to use LIMIT and OFFSET instead o
 Changed some SQL queries to not use NULL for id fields in INSERTs
 Added PostgreSQL support
 Fix for SQL errors when invalid quote limit is specified when changing settings
+Fix to prevent setting quote limit to 0
 
 [ 1.13 ] - 06/19/2020 (mm/dd/yyyy)
 Fix for incorrect error handling of mysqli_connect in install script
