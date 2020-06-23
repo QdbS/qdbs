@@ -185,7 +185,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 $r = $db->_sql($sql);
                 $row = $db->fetch_row($r);
                 if ($row['level'] == '2') {
-                    $sql = "UPDATE ".$_qdbs['tpfx']."settings SET template='".$db->escape($_POST['template_dir'])."', qlimit='".$db->escape($_POST['q_limit'])."', title='".$db->escape($_POST['p_title'])."', heading='".$db->escape($_POST['p_heading'])."', style='".$db->escape($_POST['css_style'])."'";
+                    $sql = "UPDATE ".$_qdbs['tpfx']."settings SET template='".$db->escape($_POST['template_dir'])."', qlimit='".intval($_POST['q_limit'])."', title='".$db->escape($_POST['p_title'])."', heading='".$db->escape($_POST['p_heading'])."', style='".$db->escape($_POST['css_style'])."'";
                     $r = $db->_sql($sql);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
