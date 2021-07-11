@@ -92,6 +92,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
             print($tpl->fetch($tpl->tdir.'quote_no_results.tpl'));
         }
 
+        $tpl->set('q_count', $db->q_count);
+        $tpl->set('r_count', $db->r_count);
         print($tpl->fetch($tpl->tdir.'layout_footer.tpl'));
     }
     if (!empty($_POST['do'])) {
@@ -111,6 +113,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                  $r = $db->_sql($sql);
                  print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
                  print($tpl->fetch($tpl->tdir.'quote_added.tpl'));
+                 $tpl->set('q_count', $db->q_count);
+                 $tpl->set('r_count', $db->r_count);
                  print($tpl->fetch($tpl->tdir.'layout_footer.tpl'));
                  break;
         }
