@@ -141,6 +141,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('error', 'Missing username');
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
+                    $tpl->set('q_count', $db->q_count);
+                    $tpl->set('r_count', $db->r_count);
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                     break;
                 }
@@ -155,6 +157,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_success.tpl'));
+                    $tpl->set('q_count', $db->q_count);
+                    $tpl->set('r_count', $db->r_count);
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                 }
                 break;
@@ -171,12 +175,16 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_success.tpl'));
+                    $tpl->set('q_count', $db->q_count);
+                    $tpl->set('r_count', $db->r_count);
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                 } else {
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     $tpl->set('error', 'Password mismatch');
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
+                    $tpl->set('q_count', $db->q_count);
+                    $tpl->set('r_count', $db->r_count);
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                 }
                 break;
@@ -192,6 +200,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_success.tpl'));
+                    $tpl->set('q_count', $db->q_count);
+                    $tpl->set('r_count', $db->r_count);
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                 }
                 break;
@@ -204,6 +214,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('logged', '&nbsp;');
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_failed.tpl'));
+                    $tpl->set('q_count', $db->q_count);
+                    $tpl->set('r_count', $db->r_count);
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                 }
                 $username = strtolower($_POST['username']);
@@ -221,6 +233,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('logged', '&nbsp;');
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_failed.tpl'));
+                    $tpl->set('q_count', $db->q_count);
+                    $tpl->set('r_count', $db->r_count);
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                 }
                 break;
