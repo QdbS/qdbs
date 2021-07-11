@@ -45,10 +45,9 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      header("Location: ".$ref);
                      break;
                  }
-                 $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($_GET['q'])."' AND ip='$ip'"; 
+                 $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($_GET['q'])."' AND ip='".$db->escape($ip)."'";
                  $a = $db->_sql($sql);
-                 $row = $db->fetch_row($a);
-                 if ($row['ip'] != $ip) {
+                 if ($db->_rows($a) < 1) {
                      if ($_GET['r'] == 'good') {
                          $sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating+1 WHERE id='".$db->escape($_GET['q'])."'";
                          $a = $db->_sql($sql);
@@ -81,8 +80,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 $tpl->set('quote', $row['quote']);
                 $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                 $r2 = $db->_sql($sql);
-                $row2 = $db->fetch_row($r2);
-                if ($row2['ip'] != $ip) {
+                if ($db->_rows($r2) < 1) {
                     $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                     $tpl->set('q_rate', $rate);
                 } else {
@@ -135,8 +133,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('quote', $row['quote']);
                     $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                     $r2 = $db->_sql($sql);
-                    $row2 = $db->fetch_row($r2);
-                    if ($row2['ip'] != $ip) {
+                    if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
                     } else {
@@ -155,8 +152,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('quote', $row['quote']);
                     $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                     $r2 = $db->_sql($sql);
-                    $row2 = $db->fetch_row($r2);
-                    if ($row2['ip'] != $ip) {
+                    if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
                     } else {
@@ -175,8 +171,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('quote', $row['quote']);
                     $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                     $r2 = $db->_sql($sql);
-                    $row2 = $db->fetch_row($r2);
-                    if ($row2['ip'] != $ip) {
+                    if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
                     } else {
@@ -195,8 +190,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('quote', $row['quote']);
                     $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                     $r2 = $db->_sql($sql);
-                    $row2 = $db->fetch_row($r2);
-                    if ($row2['ip'] != $ip) {
+                    if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
                     } else {
@@ -215,8 +209,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('quote', $row['quote']);
                     $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                     $r2 = $db->_sql($sql);
-                    $row2 = $db->fetch_row($r2);
-                    if ($row2['ip'] != $ip) {
+                    if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
                     } else {
@@ -235,8 +228,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('quote', $row['quote']);
                     $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                     $r2 = $db->_sql($sql);
-                    $row2 = $db->fetch_row($r2);
-                    if ($row2['ip'] != $ip) {
+                    if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
                     } else {
@@ -255,8 +247,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('quote', $row['quote']);
                     $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
                     $r2 = $db->_sql($sql);
-                    $row2 = $db->fetch_row($r2);
-                    if ($row2['ip'] != $ip) {
+                    if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
                     } else {
@@ -294,8 +285,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
             $tpl->set('quote', $row['quote']);
             $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$row['id']."' AND ip='".$db->escape($ip)."'";
             $r2 = $db->_sql($sql);
-            $row2 = $db->fetch_row($r2);
-            if ($row2['ip'] != $ip) {
+            if ($db->_rows($r2) < 1) {
                 $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                 $tpl->set('q_rate', $rate);
             } else {
