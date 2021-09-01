@@ -248,7 +248,7 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
         $tpl->set('logged', '&nbsp;');
     }
     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
-    if ($_SESSION['loggedin']) {
+    if (!empty($_SESSION['loggedin'])) {
         if (!empty($_GET['p']) && ($_GET['p'] == 'settings')) {
             $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
             $r = $db->_sql($sql);
