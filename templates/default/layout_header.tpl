@@ -2,6 +2,7 @@
   <head>
     <title><?php echo $title;?></title>
     <link rel="stylesheet" type="text/css" href="<?php echo $style;?>">
+    <link rel="alternate" type="application/rss+xml" title="Anope Quotes - Latest Quotes" href="rss.php" />
   </head>
   <body>
     <center>
