@@ -23,7 +23,8 @@
                       <a href="index.php?p=bottom"><b>bottom</b></a> / <a href="index.php?p=latest"><b>latest</b></a> /
                       <a href="index.php?p=random"><b>random</b></a><a href="index.php?p=random1"><b>&gt;0</b></a> /
                       <a href="index.php?p=browse"><b>browse</b></a> / <a href="index.php?p=search"><b>search</b></a> /
-                      <a href="index.php?p=add"><u><b>add</b></u></a> / <a href="./admin/">admin</a>
+                      <a href="./rss.php">RSS feed</a> / <a href="index.php?p=add"><u><b>add</b></u></a> / 
+                      <a href="./admin/">admin</a>
                     </td>
                   </tr>
                 </table>
