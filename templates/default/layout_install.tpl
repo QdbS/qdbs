@@ -11,7 +11,8 @@
                   *Database Username: The username you use to connect to your database.<br>
                   *Database Password: The password you use to connect to your database.<br>
                   *Database Name: The name of your database. (script installation will attempt to create this for you)<br>
-                  *Database Server: Where your server is located (usually localhost)<br><br>
+                  *Database Server: Where your server is located (usually localhost)<br>
+                  *Database Table Prefix: Prefix applied to all table names (can be blank)<br><br>
                   The rest are not required for installation and may be left as is.  They may be changed later via the admin panel.
                 </td>
               </tr>
