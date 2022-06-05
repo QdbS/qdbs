@@ -6,6 +6,14 @@ Changed some SQL queries to not use NULL for id fields in INSERTs
 Added PostgreSQL support
 Fix for SQL errors when invalid quote limit is specified when changing settings
 Fix to prevent setting quote limit to 0
+Fix for "Trying to access array offset on value of type null" error
+Fixed misssing (q|r)_count variables in admin footer template calls
+Fixed misssing (q|r)_count variables in footer template calls
+Fix for undefined variable and array offset on value of type null errors
+Added simple RSS feed
+Update layout_header.tpl (PeGaSuS-Coder)
+Fix for case sensitive searches while using PostgreSQL
+Added missing comment to installer about table prefix
 
 [ 1.13 ] - 06/19/2020 (mm/dd/yyyy)
 Fix for incorrect error handling of mysqli_connect in install script
