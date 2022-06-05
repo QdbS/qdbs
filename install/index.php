@@ -52,7 +52,7 @@ if (!empty($_POST['do'])) {
 		$allclear = FALSE;
 		$tpl->set('error', 'please fill in all required fields.<br>');
 	}
-	if ($allclear = TRUE) {
+	if ($allclear == TRUE) {
 		$pgsql = false;
 		if ($_POST['i_dbtype'] == "pgsql") {
 			$pgsql = true;
