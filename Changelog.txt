@@ -2,6 +2,7 @@ QdbS Changelog:
 
 [ ?.?? ] - ??/??/2022 [mm/dd/yyyy]
 Changed database code to use PDO
+Fix for database type not defaulting to mysql if not set in settings.php
 
 [ 1.14 ] - 05/06/2022 (mm/dd/yyyy)
 Changed changed the syntax of some SQL queries to use LIMIT and OFFSET instead of just LIMIT

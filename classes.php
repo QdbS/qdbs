@@ -39,6 +39,9 @@ $ip = getenv("REMOTE_ADDR");
 $ip = gethostbyaddr($ip);
 $ref = (!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "");
 if (defined('INSTALLED')) {
+    if (!isset($_qdbs['dbtype'])) {
+        $_qdbs['dbtype'] = 'mysql';
+    }
     $db->_connect($_qdbs['dbtype'], $_qdbs['server'], $_qdbs['user'], $_qdbs['password'], $_qdbs['db']);
     $sql = "SELECT * FROM ".$_qdbs['tpfx']."settings";
     $r = $db->_sql($sql);
