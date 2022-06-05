@@ -26,10 +26,18 @@
 
 define('INSTALLER', true);
 require("../classes.php");
+$db = null;
 
 if (defined('INSTALLED')) {
 	header("Location: ../index.php");
 	exit;
+}
+
+function printline($line) {
+	global $tpl;
+	$tpl->set('error', $line);
+	print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
+	$tpl->set('error', '');
 }
 
 if (!empty($_POST['do'])) {
@@ -45,196 +53,171 @@ if (!empty($_POST['do'])) {
 		$tpl->set('error', 'please fill in all required fields.<br>');
 	}
 	if ($allclear = TRUE) {
+		$pgsql = false;
 		if ($_POST['i_dbtype'] == "pgsql") {
-			$connstr = sprintf("host=%s dbname=%s user=%s password=%s", $_POST['i_server'], $_POST['i_database'], $_POST['i_username'], $_POST['i_password']);
-			if (($db = @pg_connect($connstr)) === FALSE) {
-				$tpl->set('error', 'Error while connecting to PostgreSQL<br>');
-			} else {
-				$tpl->set('error', 'creating admin table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@pg_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "admins (
-				  username character varying(16),
-				  password text,
-				  level integer DEFAULT 1,
-				  ip text,
-				  id serial NOT NULL,
-				  CONSTRAINT admins_pk PRIMARY KEY (id)
-				);") or die (pg_last_error($db));
-
-				$tpl->set('error', 'creating queue table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@pg_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "queue (
-				  id serial NOT NULL,
-				  quote text,
-				  CONSTRAINT queue_pk PRIMARY KEY (id)
-				);") or die (pg_last_error($db));
-
-				$tpl->set('error', 'creating quotes table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@pg_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "quotes (
-				  id serial NOT NULL,
-				  quote text,
-				  rating integer DEFAULT 0,
-				  CONSTRAINT quotes_pk PRIMARY KEY (id)
-				);") or die (pg_last_error($db));
-
-				$tpl->set('error', 'creating settings table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@pg_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "settings (
-				  template text,
-				  qlimit integer DEFAULT 0,
-				  heading character varying(80),
-				  title character varying(80),
-				  style text
-				);") or die (pg_last_error($db));
-
-				$tpl->set('error', 'creating votes table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@pg_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "votes (
-				  id integer DEFAULT 0,
-				  ip text
-				);") or die (pg_last_error($db));
-
-				@pg_query($db, "INSERT INTO " . $_POST['i_tableprefix'] . "admins (username,password,level,ip) VALUES (
-				  '".strtolower($_POST['i_username'])."',
-				  '".strtolower(md5($_POST['i_password']))."',
-				  2,
-				  ''
-				)") or die (pg_last_error($db));
-
-				@pg_query($db, "INSERT INTO " . $_POST['i_tableprefix'] . "settings (template,qlimit,heading,title,style) VALUES (
-				  '".$_POST['i_template']."',
-				  '".$_POST['i_limit']."',
-				  '".$_POST['i_heading']."',
-				  '".$_POST['i_title']."',
-				  '".$_POST['i_style']."'
-				)") or die (pg_last_error($db));
-
-				$settings = '<?php'."\n// Generated settings file, DO NOT EDIT!\n\n";
-				$settings .= '$_qdbs[\'server\'] = \''.$_POST['i_server'].'\';'."\n";
-				$settings .= '$_qdbs[\'user\'] = \''.$_POST['i_username'].'\';'."\n";
-				$settings .= '$_qdbs[\'password\'] = \''.$_POST['i_password'].'\';'."\n";
-				$settings .= '$_qdbs[\'db\'] = \''.$_POST['i_database'].'\';'."\n";
-				$settings .= '$_qdbs[\'tpfx\'] = \''.$_POST['i_tableprefix'].'\';'."\n";
-				$settings .= '$_qdbs[\'dbtype\'] = \''.$_POST['i_dbtype'].'\';'."\n";
-				$settings .= 'define(\'INSTALLED\', true);'."\n";
-				$settings .= '?'.'>';
-
-				#chmod('../settings.php', 0666);
-				if (!($fp = @fopen('../settings.php', 'w'))) {
-					$tpl->set('error', '<b>ERROR</b>: cannot open settings.php!<br>');
-					print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				} else {
-					$result = @fputs($fp, $settings, strlen($settings));
-				}
-
-				@fclose($fp);
-				#chmod('../settings.php', 0600);
-				$tpl->set('error', 'Done.  You may now remove this file and directory.<br>');
-			}
+			$pgsql = true;
 		}
-		else {
-			if (($db = @mysqli_connect($_POST['i_server'], $_POST['i_username'], $_POST['i_password'])) === FALSE) {
-				$tpl->set('error', 'Error while connecting: '.mysqli_connect_error().'<br>');
-			} else {
+		// Use a single iteration do loop so we can skip to end on error
+		do {
+			// Create database if required (MySQL only)
+			if ($_POST['i_dbtype'] == "mysql") {
 				if ($_POST['i_type'] == 'script') {
-					$sql = 'CREATE DATABASE IF NOT EXISTS '.$_POST['i_database'];
-					if (mysqli_query($db, $sql)) {
-						$tpl->set('error', 'created database: "'.$_POST['i_database'].'"<br>');
-						print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-					} else {
-						$tpl->set('error', 'Error while creating database: '.mysqli_error($db).'<br>');
-						print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
+					$dsn = sprintf("%s:host=%s", $_POST['i_dbtype'], $_POST['i_server']);
+					try {
+						$db = new PDO($dsn, $_POST['i_username'], $_POST['i_password']);
+						$sql = 'CREATE DATABASE IF NOT EXISTS '.$_POST['i_database'];
+						if ($db->exec($sql) !== false) {
+							printline('created database: "'.$_POST['i_database'].'"<br>');
+						} else {
+							printline('Error while creating database: '.$db->errorInfo()[2].'<br>');
+							break;
+						}
+						$db = null;
+					} catch (Exception $e) {
+						printline('Error while connecting to database: '.$e->getMessage().'<br>');
+						break;
 					}
 				}
+			}
 
-				@mysqli_close($db);
-				$db = @mysqli_connect($_POST['i_server'], $_POST['i_username'], $_POST['i_password'], $_POST['i_database']);
+			// Connect to database
+			$dsn = sprintf("%s:host=%s;dbname=%s", $_POST['i_dbtype'], $_POST['i_server'], $_POST['i_database']);
+			try {
+				$db = new PDO($dsn, $_POST['i_username'], $_POST['i_password']);
+				$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
+			} catch (Exception $e) {
+				printline('Error while connecting to database: '.$e->getMessage().'<br>');
+				break;
+			}
 
-				$tpl->set('error', 'creating admin table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@mysqli_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "admins (
+			// Create admins table
+			printline('creating admin table...<br>');
+			if ($pgsql) {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "admins (
+				  username character varying(16), password text,
+				  level integer DEFAULT 1, ip text, id serial NOT NULL,
+				  CONSTRAINT admins_pk PRIMARY KEY (id) );";
+			} else {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "admins (
 				  username varchar(16) NOT NULL default '',
-				  password text NOT NULL,
-				  level char(1) NOT NULL default '1',
-				  ip text NOT NULL,
-				  id int(11) NOT NULL auto_increment,
-				  PRIMARY KEY  (id)
-				)") or die (mysqli_error($db));
+				  password text NOT NULL, level char(1) NOT NULL default '1',
+				  ip text NOT NULL, id int(11) NOT NULL auto_increment,
+				  PRIMARY KEY  (id) )";
+			}
+			if ($db->exec($sql) === false) {
+				printline('Error creating admins table: '.$db->errorInfo()[2].'<br>');
+				break;
+			}
 
-				$tpl->set('error', 'creating queue table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@mysqli_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "queue (
-				  id int(11) NOT NULL auto_increment,
-				  quote longtext NOT NULL,
-				  PRIMARY KEY  (id)
-				)") or die (mysqli_error($db));
+			// Create queue table
+			printline('creating queue table...<br>');
+			if ($pgsql) {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "queue (
+				  id serial NOT NULL, quote text,
+				  CONSTRAINT queue_pk PRIMARY KEY (id) );";
+			} else {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "queue (
+				  id int(11) NOT NULL auto_increment, quote longtext NOT NULL,
+				  PRIMARY KEY  (id) )";
+			}
+			if ($db->exec($sql) === false) {
+				printline('Error creating queue table: '.$db->errorInfo()[2].'<br>');
+				break;
+			}
 
-				$tpl->set('error', 'creating quotes table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@mysqli_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "quotes (
-				  id int(11) NOT NULL auto_increment,
-				  quote longtext NOT NULL,
+			// Create quotes table
+			printline('creating quotes table...<br>');
+			if ($pgsql) {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "quotes (
+				  id serial NOT NULL, quote text, rating integer DEFAULT 0,
+				  CONSTRAINT quotes_pk PRIMARY KEY (id) );";
+			} else {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "quotes (
+				  id int(11) NOT NULL auto_increment, quote longtext NOT NULL,
 				  rating int(11) NOT NULL default '0',
-				  PRIMARY KEY  (id)
-				)") or die (mysqli_error($db));
+				  PRIMARY KEY  (id) )";
+			}
+			if ($db->exec($sql) === false) {
+				printline('Error creating quote table: '.$db->errorInfo()[2].'<br>');
+				break;
+			}
 
-				$tpl->set('error', 'creating settings table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@mysqli_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "settings (
-				  template text NOT NULL,
-				  qlimit int(11) NOT NULL default '0',
+			// Create settings table
+			printline('creating settings table...<br>');
+			if ($pgsql) {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "settings (
+				  template text, qlimit integer DEFAULT 0,
+				  heading character varying(80),  title character varying(80),
+				  style text );";
+			} else {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "settings (
+				  template text NOT NULL, qlimit int(11) NOT NULL default '0',
 				  heading varchar(80) NOT NULL default '',
 				  title varchar(80) NOT NULL default '',
-				  style text NOT NULL
-				)") or die (mysqli_error($db));
-
-				$tpl->set('error', 'creating votes table...<br>');
-				print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				@mysqli_query($db, "CREATE TABLE " . $_POST['i_tableprefix'] . "votes (
-				  id int(11) NOT NULL default '0',
-				  ip text NOT NULL
-				)") or die (mysqli_error($db));
-
-				@mysqli_query($db, "INSERT INTO " . $_POST['i_tableprefix'] . "admins VALUES (
-				  '".strtolower($_POST['i_username'])."',
-				  '".strtolower(md5($_POST['i_password']))."',
-				  '2',
-				  '',
-				  NULL
-				)") or die (mysqli_error($db));
-
-				@mysqli_query($db, "INSERT INTO " . $_POST['i_tableprefix'] . "settings VALUES (
-				  '".$_POST['i_template']."',
-				  '".$_POST['i_limit']."',
-				  '".$_POST['i_heading']."',
-				  '".$_POST['i_title']."',
-				  '".$_POST['i_style']."'
-				)") or die (mysqli_error($db));
-
-				$settings = '<?php'."\n// Generated settings file, DO NOT EDIT!\n\n";
-				$settings .= '$_qdbs[\'server\'] = \''.$_POST['i_server'].'\';'."\n";
-				$settings .= '$_qdbs[\'user\'] = \''.$_POST['i_username'].'\';'."\n";
-				$settings .= '$_qdbs[\'password\'] = \''.$_POST['i_password'].'\';'."\n";
-				$settings .= '$_qdbs[\'db\'] = \''.$_POST['i_database'].'\';'."\n";
-				$settings .= '$_qdbs[\'tpfx\'] = \''.$_POST['i_tableprefix'].'\';'."\n";
-				$settings .= '$_qdbs[\'dbtype\'] = \''.$_POST['i_dbtype'].'\';'."\n";
-				$settings .= 'define(\'INSTALLED\', true);'."\n";
-				$settings .= '?'.'>';
-
-				#chmod('../settings.php', 0666);
-				if (!($fp = @fopen('../settings.php', 'w'))) {
-					$tpl->set('error', '<b>ERROR</b>: cannot open settings.php!<br>');
-					print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
-				} else {
-					$result = @fputs($fp, $settings, strlen($settings));
-				}
-
-				@fclose($fp);
-				#chmod('../settings.php', 0600);
-				$tpl->set('error', 'Done.  You may now remove this file and directory.<br>');
+				  style text NOT NULL)";
 			}
-		}
+			if ($db->exec($sql) === false) {
+				printline('Error creating settings table: '.$db->errorInfo()[2].'<br>');
+				break;
+			}
+
+			// Create votes table
+			printline('creating votes table...<br>');
+			if ($pgsql) {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "votes (
+				  id integer DEFAULT 0, ip text );";
+			} else {
+				$sql = "CREATE TABLE " . $_POST['i_tableprefix'] . "votes (
+				  id int(11) NOT NULL default '0', ip text NOT NULL)";
+			}
+			if ($db->exec($sql) === false) {
+				printline('Error creating votes table: '.$db->errorInfo()[2].'<br>');
+				break;
+			}
+
+			// Create initial admin
+			printline('Creating initial admin...<br>');
+			$sql = 'INSERT INTO ' . $_POST['i_tableprefix'] . 'admins (username, password, level, ip) VALUES (?, ?, ?, ?);';
+			$args = [strtolower($_POST['i_username']), strtolower(md5($_POST['i_password'])), 2, ''];
+			$sth = $db->prepare($sql);
+			if ($sth->execute($args) === false) {
+				printline('Error creating initial admin: '.$db->errorInfo()[2].'<br>');
+				break;
+			}
+
+			// Populate settings table
+			printline('Populating settings table...<br>');
+			$sql = 'INSERT INTO ' . $_POST['i_tableprefix'] . 'settings (template, qlimit, heading, title, style) VALUES (?, ?, ?, ?, ?);';
+			$args = [$_POST['i_template'], $_POST['i_limit'], $_POST['i_heading'], $_POST['i_title'], $_POST['i_style']];
+			$sth = $db->prepare($sql);
+			if ($sth->execute($args) === false) {
+				printline('Error creating initial admin: '.$db->errorInfo()[2].'<br>');
+				break;
+			}
+
+			// Generate settings.php
+			printline('Generating settings.php...<br>');
+			$settings = '<?php'."\n// Generated settings file, DO NOT EDIT!\n\n";
+			$settings .= '$_qdbs[\'server\'] = \''.$_POST['i_server'].'\';'."\n";
+			$settings .= '$_qdbs[\'user\'] = \''.$_POST['i_username'].'\';'."\n";
+			$settings .= '$_qdbs[\'password\'] = \''.$_POST['i_password'].'\';'."\n";
+			$settings .= '$_qdbs[\'db\'] = \''.$_POST['i_database'].'\';'."\n";
+			$settings .= '$_qdbs[\'tpfx\'] = \''.$_POST['i_tableprefix'].'\';'."\n";
+			$settings .= '$_qdbs[\'dbtype\'] = \''.$_POST['i_dbtype'].'\';'."\n";
+			$settings .= 'define(\'INSTALLED\', true);'."\n";
+			$settings .= '?'.'>';
+
+			if (!($fp = @fopen('../settings.php', 'w'))) {
+				putline('<b>ERROR</b>: cannot open settings.php!<br>');
+			} else {
+				$result = @fputs($fp, $settings, strlen($settings));
+			}
+
+			@fclose($fp);
+
+			printline('Done.  You may now remove this file and directory.<br>');
+			printline('Initial admin user name and password are set to the same as the database user name and password.<br>');
+		} while (0);
 	}
 	print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
 	print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));

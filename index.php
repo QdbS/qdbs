@@ -38,55 +38,56 @@ $page = (empty($_GET['page']) ? '1' : $_GET['page']);
 $tpl->set('page_list', $pgr->pageList($page, $pages));
 
 if (!empty($_GET['do']) || !empty($_POST['do'])) {
-    if (!empty($_GET['do'])) {
-        switch ($_GET['do']) {
-            case 'rate':
-                 if (empty($_GET['q'])) {
-                     header("Location: ".$ref);
-                     break;
-                 }
-                 $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($_GET['q'])."' AND ip='".$db->escape($ip)."'";
-                 $a = $db->_sql($sql);
-                 if ($db->_rows($a) < 1) {
-                     if ($_GET['r'] == 'good') {
-                         $sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating+1 WHERE id='".$db->escape($_GET['q'])."'";
-                         $a = $db->_sql($sql);
-                         $sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES ('".$db->escape($_GET['q'])."', '".$db->escape($ip)."')";
-                         $a = $db->_sql($sql);
-                     }
-                     elseif ($_GET['r'] == 'bad') {
-                         $sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating-1 WHERE id='".$db->escape($_GET['q'])."'";
-                         $a = $db->_sql($sql);
-                         $sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES ('".$db->escape($_GET['q'])."', '".$db->escape($ip)."')";
-                         $a = $db->_sql($sql);
-                     }
-                 }
-                 header("Location: ".$ref);
-                 break;
-        }
-    }
-    if ((!empty($_POST['q']) || !empty($_GET['q'])) && ((!empty($_GET['p']) && ($_GET['p'] == 'search')) || (!empty($_GET['do']) && ($_GET['do'] == 'search'))) ) {
-        print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
-        if ( !empty($_POST['q']) ) {
-	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE LOWER(quote) LIKE LOWER('%".$db->escape($_POST['q'])."%') LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
-        } else {
-	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE LOWER(quote) LIKE LOWER('%".$db->escape($_GET['q'])."%') LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
-        }
-        $r = $db->_sql($sql);
-        if ($db->_rows($r) > 0) {
-            while ($row = $db->fetch_row($r)) {
-                $tpl->set('q_id', $row['id']);
-                $tpl->set('q_rating', $row['rating']);
-                $tpl->set('quote', $row['quote']);
-                $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                $r2 = $db->_sql($sql);
-                if ($db->_rows($r2) < 1) {
-                    $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
-                    $tpl->set('q_rate', $rate);
-                } else {
-                    $tpl->set('q_rate', '');
-                }
-                print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
+	if (!empty($_GET['do'])) {
+		switch ($_GET['do']) {
+			case 'rate':
+				if (empty($_GET['q'])) {
+					header("Location: ".$ref);
+					break;
+				}
+				$sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+				$a = $db->_sql($sql, [$_GET['q'], $ip]);
+				if ($db->_rows($a) < 1) {
+					if ($_GET['r'] == 'good') {
+						$sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating+1 WHERE id=?";
+						$a = $db->_sql($sql, [$_GET['q']]);
+						$sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES (?, ?)";
+						$a = $db->_sql($sql, [$_GET['q'], $ip]);
+					}
+					elseif ($_GET['r'] == 'bad') {
+						$sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating-1 WHERE id=?";
+						$a = $db->_sql($sql, [$_GET['q']]);
+						$sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES (?, ?)";
+						$a = $db->_sql($sql, [$_GET['q'], $ip]);
+					}
+				}
+				header("Location: ".$ref);
+				break;
+		}
+	}
+	if ((!empty($_POST['q']) || !empty($_GET['q'])) && ((!empty($_GET['p']) && ($_GET['p'] == 'search')) || (!empty($_GET['do']) && ($_GET['do'] == 'search'))) ) {
+		print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
+		$sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE LOWER(quote) LIKE LOWER(?) ORDER BY id ASC LIMIT " . intval($pgr->limit) . " OFFSET " . intval($start);
+		if ( !empty($_POST['q']) ) {
+			$args = ["%" . $_POST['q'] . "%"];
+		} else {
+			$args = ["%" . $_GET['q'] . "%"];
+		}
+		$r = $db->_sql($sql, $args);
+		if ($db->_rows($r) > 0) {
+			while ($row = $db->fetch_row($r)) {
+				$tpl->set('q_id', $row['id']);
+				$tpl->set('q_rating', $row['rating']);
+				$tpl->set('quote', $row['quote']);
+				$sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+				$r2 = $db->_sql($sql, [$row['id'], $ip]);
+				if ($db->_rows($r2) < 1) {
+					$rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
+					$tpl->set('q_rate', $rate);
+				} else {
+					$tpl->set('q_rate', '');
+				}
+				print($tpl->fetch($tpl->tdir.'quote_block.tpl'));
             }
         } else {
             print($tpl->fetch($tpl->tdir.'quote_no_results.tpl'));
@@ -99,24 +100,24 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     if (!empty($_POST['do'])) {
         switch ($_POST['do']) {
             case 'add':
-                 if (empty($_POST['quote'])) {
-                     break;
-                 }
-                 $quote = htmlspecialchars($_POST['quote']);
-                 $quote = str_replace("  ", "&nbsp;&nbsp;", $quote);
-                 $quote = nl2br($quote);
-                 if (ini_get("magic_quotes_runtime") or ini_get("magic_quotes_gpc")) {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."queue (quote) VALUES ('".$db->escape(stripslashes($quote))."')";
-                 } else {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."queue (quote) VALUES ('".$db->escape($quote)."')";
-                 }
-                 $r = $db->_sql($sql);
-                 print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
-                 print($tpl->fetch($tpl->tdir.'quote_added.tpl'));
-                 $tpl->set('q_count', $db->q_count);
-                 $tpl->set('r_count', $db->r_count);
-                 print($tpl->fetch($tpl->tdir.'layout_footer.tpl'));
-                 break;
+                if (empty($_POST['quote'])) {
+                    break;
+                }
+                $quote = htmlspecialchars($_POST['quote']);
+                $quote = str_replace("  ", "&nbsp;&nbsp;", $quote);
+                $quote = nl2br($quote);
+                $sql = "INSERT INTO ".$_qdbs['tpfx']."queue (quote) VALUES (?);";
+                $args = [$quote];
+                if (ini_get("magic_quotes_runtime") or ini_get("magic_quotes_gpc")) {
+                    $args = [stripslashes($quote)];
+                }
+                $r = $db->_sql($sql, $args);
+                print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
+                print($tpl->fetch($tpl->tdir.'quote_added.tpl'));
+                $tpl->set('q_count', $db->q_count);
+                $tpl->set('r_count', $db->r_count);
+                print($tpl->fetch($tpl->tdir.'layout_footer.tpl'));
+                break;
         }
     }
 } else {
@@ -129,14 +130,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
         }
         switch ($_GET['p']) {
             case 'top':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating DESC LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating DESC LIMIT " . intval($pgr->limit) . " OFFSET " . intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('q_rating', $row['rating']);
                     $tpl->set('quote', $row['quote']);
-                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                    $r2 = $db->_sql($sql);
+                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+                    $r2 = $db->_sql($sql, [$row['id'], $ip]);
                     if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
@@ -148,14 +149,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'bottom':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating ASC LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY rating ASC LIMIT " . intval($pgr->limit) . " OFFSET " . intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('q_rating', $row['rating']);
                     $tpl->set('quote', $row['quote']);
-                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                    $r2 = $db->_sql($sql);
+                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+                    $r2 = $db->_sql($sql, [$row['id'], $ip]);
                     if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
@@ -167,14 +168,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'latest':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id DESC LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id DESC LIMIT " . intval($pgr->limit) . " OFFSET " . intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('q_rating', $row['rating']);
                     $tpl->set('quote', $row['quote']);
-                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                    $r2 = $db->_sql($sql);
+                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+                    $r2 = $db->_sql($sql, [$row['id'], $ip]);
                     if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
@@ -186,14 +187,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'random':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY ".$db->rand." LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY ".$db->rand." LIMIT " . intval($pgr->limit) . " OFFSET " . intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('q_rating', $row['rating']);
                     $tpl->set('quote', $row['quote']);
-                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                    $r2 = $db->_sql($sql);
+                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+                    $r2 = $db->_sql($sql, [$row['id'], $ip]);
                     if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
@@ -205,14 +206,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'random1':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE rating>0 ORDER BY ".$db->rand." LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE rating>0 ORDER BY ".$db->rand." LIMIT " . intval($pgr->limit) . " OFFSET " . intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('q_rating', $row['rating']);
                     $tpl->set('quote', $row['quote']);
-                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                    $r2 = $db->_sql($sql);
+                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+                    $r2 = $db->_sql($sql, [$row['id'], $ip]);
                     if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
@@ -230,8 +231,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('q_rating', $row['rating']);
                     $tpl->set('quote', $row['quote']);
-                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                    $r2 = $db->_sql($sql);
+                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+                    $r2 = $db->_sql($sql, [$row['id'], $ip]);
                     if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
@@ -243,14 +244,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 
                 break;
             case 'browse':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id LIMIT " . intval($pgr->limit) . " OFFSET " . intval($start);
                 $r = $db->_sql($sql);
                 while ($row = $db->fetch_row($r)) {
                     $tpl->set('q_id', $row['id']);
                     $tpl->set('q_rating', $row['rating']);
                     $tpl->set('quote', $row['quote']);
-                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$db->escape($row['id'])."' AND ip='".$db->escape($ip)."'";
-                    $r2 = $db->_sql($sql);
+                    $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+                    $r2 = $db->_sql($sql, [$row['id'], $ip]);
                     if ($db->_rows($r2) < 1) {
                         $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                         $tpl->set('q_rate', $rate);
@@ -274,21 +275,21 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     }
     elseif (!empty($_SERVER['QUERY_STRING'])) {
         $id = $_SERVER['QUERY_STRING'];
-	preg_match("/(\d+)/", $id, $matches);
-	if (!empty($matches[1])) {
+    preg_match("/(\d+)/", $id, $matches);
+    if (!empty($matches[1])) {
             $id = $matches[1];
         } else {
             $id = -1;
         }
-        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE id='".$db->escape($id)."' LIMIT 1";
-        $r = $db->_sql($sql);
+        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE id=? LIMIT 1";
+        $r = $db->_sql($sql, [$id]);
         if ($db->_rows($r) > 0) {
             $row = $db->fetch_row($r);
             $tpl->set('q_id', $row['id']);
             $tpl->set('q_rating', $row['rating']);
             $tpl->set('quote', $row['quote']);
-            $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id='".$row['id']."' AND ip='".$db->escape($ip)."'";
-            $r2 = $db->_sql($sql);
+            $sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+            $r2 = $db->_sql($sql, [$row['id'], $ip]);
             if ($db->_rows($r2) < 1) {
                 $rate = $tpl->fetch($tpl->tdir.'quote_rate.tpl');
                 $tpl->set('q_rate', $rate);

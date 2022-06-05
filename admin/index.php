@@ -46,17 +46,13 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      header ("Location: ".$ref);
                      break;
                  }
-                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."queue WHERE id='".$db->escape($_GET['q'])."'";
-                 $r = $db->_sql($sql);
+                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."queue WHERE id=?";
+                 $r = $db->_sql($sql, [$_GET['q']]);
                  $row = $db->fetch_row($r);
-                 if (ini_get("magic_quotes_runtime") or ini_get("magic_quotes_gpc")) {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (quote,rating) VALUES ('".$db->escape(stripslashes($row['quote']))."', '0')";
-                 } else {
-                      $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (quote,rating) VALUES ('".$db->escape($row['quote'])."', '0')";
-                 }
-                 $r = $db->_sql($sql);
-                 $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id='".$db->escape($_GET['q'])."'";
-                 $r = $db->_sql($sql);
+				 $sql = "INSERT INTO ".$_qdbs['tpfx']."quotes (quote,rating) VALUES (?, '0')";
+                 $r = $db->_sql($sql, [$row['quote']]);
+                 $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id=?";
+                 $r = $db->_sql($sql, [$_GET['q']]);
 
                  header ("Location: ".$ref);
                  break;
@@ -65,8 +61,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      header ("Location: ".$ref);
                      break;
                  }
-                 $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id='".$db->escape($_GET['q'])."'";
-                 $r = $db->_sql($sql);
+                 $sql = "DELETE FROM ".$_qdbs['tpfx']."queue WHERE id=?";
+                 $r = $db->_sql($sql, [$_GET['q']]);
 
                  header ("Location: ".$ref);
                  break;
@@ -75,12 +71,12 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      header ("Location: ".$ref);
                      break;
                  }
-                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
-                 $r = $db->_sql($sql);
+                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+                 $r = $db->_sql($sql, [$_COOKIE['qdb_username']]);
                  $row = $db->fetch_row($r);
                  if ($row['level'] == '2') {
-                     $sql = "DELETE FROM ".$_qdbs['tpfx']."admins WHERE id='".$db->escape($_GET['id'])."'";
-                     $r = $db->_sql($sql);
+                     $sql = "DELETE FROM ".$_qdbs['tpfx']."admins WHERE id=?";
+                     $r = $db->_sql($sql, [$_GET['id']]);
                  }
 
                  header ("Location: ".$ref);
@@ -90,16 +86,16 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      header ("Location: ".$ref);
                      break;
                  }
-                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
-                 $r = $db->_sql($sql);
+                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+                 $r = $db->_sql($sql, [$_COOKIE['qdb_username']]);
                  $row = $db->fetch_row($r);
                  if ($row['level'] == '2') {
-                     $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE id='".$db->escape($_GET['id'])."' LIMIT 1";
-                     $r = $db->_sql($sql);
+                     $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE id=? LIMIT 1";
+                     $r = $db->_sql($sql, [$_GET['id']]);
                      $row = $db->fetch_row($r);
                      if ($row['level'] < '2') {
-                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level+1 WHERE id='".$db->escape($_GET['id'])."'";
-                         $r = $db->_sql($sql);
+                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level+1 WHERE id=?";
+                         $r = $db->_sql($sql, [$_GET['id']]);
                      }
                  }
 
@@ -110,16 +106,16 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                      header ("Location: ".$ref);
                      break;
                  }
-                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
-                 $r = $db->_sql($sql);
+                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+                 $r = $db->_sql($sql, [$_COOKIE['qdb_username']]);
                  $row = $db->fetch_row($r);
                  if ($row['level'] == '2') {
-                     $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE id='".$db->escape($_GET['id'])."' LIMIT 1";
-                     $r = $db->_sql($sql);
+                     $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE id=? LIMIT 1";
+                     $r = $db->_sql($sql, [$_GET['id']]);
                      $row = $db->fetch_row($r);
                      if ($row['level'] > '1') {
-                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level-1 WHERE id='".$db->escape($_GET['id'])."'";
-                         $r = $db->_sql($sql);
+                         $sql = "UPDATE ".$_qdbs['tpfx']."admins SET level=level-1 WHERE id=?";
+                         $r = $db->_sql($sql, [$_GET['id']]);
                      }
                  }
 
@@ -146,14 +142,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                     print($tpl->fetch('.'.$tpl->tdir.'admin_footer.tpl'));
                     break;
                 }
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
-                $r = $db->_sql($sql);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+                $r = $db->_sql($sql, [$_COOKIE['qdb_username']]);
                 $row = $db->fetch_row($r);
                 if ($row['level'] == '2') {
                     $username = strtolower($_POST['username']);
                     $password = strtolower(md5((isset($_POST['u_password']) ? $_POST['u_password'] : "")));
-                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip) VALUES ('".$db->escape($username)."', '".$db->escape($password)."', '')";
-                    $r = $db->_sql($sql);
+                    $sql = "INSERT INTO ".$_qdbs['tpfx']."admins (username,password,ip) VALUES (?, ?, '')";
+                    $r = $db->_sql($sql, [$username, $password]);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_success.tpl'));
@@ -166,12 +162,12 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 $c_password = strtolower(md5(isset($_POST['c_password']) ? $_POST['c_password'] : ""));
                 $c_password1 = strtolower(md5(isset($_POST['c_password1']) ? $_POST['c_password1'] : ""));
                 $c_password2 = strtolower(md5(isset($_POST['c_password2']) ? $_POST['c_password2'] : ""));
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
-                $r = $db->_sql($sql);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+                $r = $db->_sql($sql, [$_COOKIE['qdb_username']]);
                 $row = $db->fetch_row($r);
                 if (($c_password == $row['password']) && ($c_password1 == $c_password2)) {
-                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET password='".$db->escape($c_password1)."' WHERE username='".$db->escape($_COOKIE['qdb_username'])."'";
-                    $r = $db->_sql($sql);
+                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET password=? WHERE username=?";
+                    $r = $db->_sql($sql, [$c_password1, $_COOKIE['qdb_username']]);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_success.tpl'));
@@ -189,14 +185,14 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 }
                 break;
             case 'update':
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
-                $r = $db->_sql($sql);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+                $r = $db->_sql($sql, [$_COOKIE['qdb_username']]);
                 $row = $db->fetch_row($r);
                 if ($row['level'] == '2') {
 					$qlimit = intval($_POST['q_limit']);
 					if ($qlimit <= 0) { $qlimit = 10; }
-                    $sql = "UPDATE ".$_qdbs['tpfx']."settings SET template='".$db->escape($_POST['template_dir'])."', qlimit='".$qlimit."', title='".$db->escape($_POST['p_title'])."', heading='".$db->escape($_POST['p_heading'])."', style='".$db->escape($_POST['css_style'])."'";
-                    $r = $db->_sql($sql);
+                    $sql = "UPDATE ".$_qdbs['tpfx']."settings SET template=?, qlimit=?, title=?, heading=?, style=?";
+                    $r = $db->_sql($sql, [$_POST['template_dir'], $qlimit, $_POST['p_title'], $_POST['p_heading'], $_POST['css_style']]);
                     $tpl->set('logged', $tpl->fetch('.'.$tpl->tdir.'admin_links.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
                     print($tpl->fetch('.'.$tpl->tdir.'admin_success.tpl'));
@@ -220,12 +216,12 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
                 }
                 $username = strtolower($_POST['username']);
                 $password = strtolower(md5(isset($_POST['password']) ? $_POST['password'] : ""));
-                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($username)."' LIMIT 1";
-                $r = $db->_sql($sql);
+                $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+                $r = $db->_sql($sql, [$username]);
                 $row = $db->fetch_row($r);
                 if (strtolower($row['password']) == $password) {
-                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET ip='".$db->escape($ip)."' WHERE username='".$db->escape($username)."'";
-                    $r = $db->_sql($sql);
+                    $sql = "UPDATE ".$_qdbs['tpfx']."admins SET ip=? WHERE username=?";
+                    $r = $db->_sql($sql, [$ip, $username]);
                     setcookie ('qdb_username', $username, time()+(3600*24*365), '/');
                     setcookie ('qdb_password', $password, time()+(3600*24*365), '/');
                     header ("Location: ".$ref);
@@ -250,8 +246,8 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
     if (!empty($_SESSION['loggedin'])) {
         if (!empty($_GET['p']) && ($_GET['p'] == 'settings')) {
-            $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape($_COOKIE['qdb_username'])."' LIMIT 1";
-            $r = $db->_sql($sql);
+            $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username=? LIMIT 1";
+            $r = $db->_sql($sql, [$_COOKIE['qdb_username']]);
             $row = $db->fetch_row($r);
             if ($row['level'] == '2') {
                 $sql = "SELECT * FROM ".$_qdbs['tpfx']."settings";
