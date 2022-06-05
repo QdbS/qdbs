@@ -44,13 +44,18 @@ if (!empty($_POST['do'])) {
 	$tpl->set('logged', 'Quotes Database Installation');
 	print($tpl->fetch('.'.$tpl->tdir.'admin_header.tpl'));
 	$allclear = TRUE;
-	if (empty($_POST['i_username']) || empty($_POST['i_password']) || empty($_POST['i_database']) || empty($_POST['i_server'])) {
+	if (empty($_POST['i_username']) || empty($_POST['i_password']) || empty($_POST['i_database']) || empty($_POST['i_server']) ||
+		empty($_POST['i_adminusername']) || empty($_POST['i_adminpassword']) || empty($_POST['i_adminpassrepeat'])) {
 		$allclear = FALSE;
-		$tpl->set('error', 'please fill in all required fields.<br>');
+		printline('please fill in all required fields.<br>');
 	}
 	if (empty($_POST['i_title']) || empty($_POST['i_template']) || empty($_POST['i_limit']) || empty($_POST['i_style']) || empty($_POST['i_heading'])) {
 		$allclear = FALSE;
-		$tpl->set('error', 'please fill in all required fields.<br>');
+		printline('please fill in all required fields.<br>');
+	}
+	if ($_POST['i_adminpassword'] != $_POST['i_adminpassrepeat']) {
+		$allclear = FALSE;
+		printline('admin passwords supplied do not match.<br>');
 	}
 	if ($allclear == TRUE) {
 		$pgsql = false;
@@ -178,7 +183,7 @@ if (!empty($_POST['do'])) {
 			// Create initial admin
 			printline('Creating initial admin...<br>');
 			$sql = 'INSERT INTO ' . $_POST['i_tableprefix'] . 'admins (username, password, level, ip) VALUES (?, ?, ?, ?);';
-			$args = [strtolower($_POST['i_username']), strtolower(md5($_POST['i_password'])), 2, ''];
+			$args = [strtolower($_POST['i_adminusername']), strtolower(md5($_POST['i_adminpassword'])), 2, ''];
 			$sth = $db->prepare($sql);
 			if ($sth->execute($args) === false) {
 				printline('Error creating initial admin: '.$db->errorInfo()[2].'<br>');
@@ -208,7 +213,7 @@ if (!empty($_POST['do'])) {
 			$settings .= '?'.'>';
 
 			if (!($fp = @fopen('../settings.php', 'w'))) {
-				putline('<b>ERROR</b>: cannot open settings.php!<br>');
+				printline('<b>ERROR</b>: cannot open settings.php!<br>');
 			} else {
 				$result = @fputs($fp, $settings, strlen($settings));
 			}
@@ -216,7 +221,6 @@ if (!empty($_POST['do'])) {
 			@fclose($fp);
 
 			printline('Done.  You may now remove this file and directory.<br>');
-			printline('Initial admin user name and password are set to the same as the database user name and password.<br>');
 		} while (0);
 	}
 	print($tpl->fetch('.'.$tpl->tdir.'admin_error.tpl'));
