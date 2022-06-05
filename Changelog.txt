@@ -1,6 +1,6 @@
 QdbS Changelog:
 
-[ ?.?? ] - ??/??/???? (mm/dd/yyyy)
+[ 1.14 ] - 05/06/2022 (mm/dd/yyyy)
 Changed changed the syntax of some SQL queries to use LIMIT and OFFSET instead of just LIMIT
 Changed some SQL queries to not use NULL for id fields in INSERTs
 Added PostgreSQL support

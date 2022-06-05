@@ -2,7 +2,7 @@
 /**************************************************************************
 
     This file is part of the Quotes Database System (QdbS)
-    Copyright (C) 2003-2012 QdbS.org
+    Copyright (C) 2003-2022 QdbS.org
     Written by Kyle Florence (kyle.florence@gmail.com)
     Maintained by Matthew Beeching (jobe@qdbs.org)
     Table Prefix patch by Thomas Ward (jouva@moufette.com)
@@ -23,6 +23,8 @@
     $Id: classes.php 27 2012-05-05 21:56:04Z jobe1986 $
 
 ***************************************************************************/
+
+define('QDBS_VERSION', '1.14');
 
 if ((@include("settings.php")) === false) {
 	if (!defined('INSTALLER')) {
@@ -57,7 +59,7 @@ if (defined('INSTALLED')) {
     $p = $db->fetch_row($db->_sql($sql))[0];
     $tpl->set('t', $t);
     $tpl->set('p', $p);
-    $tpl->set('version', '1.13');
+    $tpl->set('version', QDBS_VERSION);
     if(!isset($_SESSION['loggedin']) && isset($_COOKIE['qdb_username']) && isset($_COOKIE['qdb_password'])) {
         $sql = "SELECT * FROM ".$_qdbs['tpfx']."admins WHERE username='".$db->escape(strtolower($_COOKIE['qdb_username']))."' LIMIT 1";
         $r = $db->_sql($sql);
@@ -79,7 +81,7 @@ if (defined('INSTALLED')) {
     $tpl->set('p', '0');
     $tpl->set('q_count', '0');
     $tpl->set('r_count', '0');
-    $tpl->set('version', 'unknown');
+    $tpl->set('version', QDBS_VERSION);
 }
 
 class QdbS_Pager {

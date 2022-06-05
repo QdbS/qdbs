@@ -2,7 +2,7 @@
 /**************************************************************************
 
 	This file is part of the Quotes Database System (QdbS)
-	Copyright (C) 2003-2012 QdbS.org
+	Copyright (C) 2003-2022 QdbS.org
 	Written by Kyle Florence (kyle.florence@gmail.com)
 	Maintained by Matthew Beeching (jobe@qdbs.org)
 	Table Prefix patch by Thomas Ward (jouva@moufette.com)
