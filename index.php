@@ -68,9 +68,9 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
     if ((!empty($_POST['q']) || !empty($_GET['q'])) && ((!empty($_GET['p']) && ($_GET['p'] == 'search')) || (!empty($_GET['do']) && ($_GET['do'] == 'search'))) ) {
         print($tpl->fetch($tpl->tdir.'layout_header.tpl'));
         if ( !empty($_POST['q']) ) {
-	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE quote LIKE '%".$db->escape($_POST['q'])."%' LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE LOWER(quote) LIKE LOWER('%".$db->escape($_POST['q'])."%') LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
         } else {
-	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE quote LIKE '%".$db->escape($_GET['q'])."%' LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
+	        $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE LOWER(quote) LIKE LOWER('%".$db->escape($_GET['q'])."%') LIMIT ".intval($pgr->limit)." OFFSET ".intval($start);
         }
         $r = $db->_sql($sql);
         if ($db->_rows($r) > 0) {
