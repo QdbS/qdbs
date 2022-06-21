@@ -45,20 +45,25 @@ if (!empty($_GET['do']) || !empty($_POST['do'])) {
 					header("Location: ".$ref);
 					break;
 				}
-				$sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
-				$a = $db->_sql($sql, [$_GET['q'], $ip]);
-				if ($db->_rows($a) < 1) {
-					if ($_GET['r'] == 'good') {
-						$sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating+1 WHERE id=?";
-						$a = $db->_sql($sql, [$_GET['q']]);
-						$sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES (?, ?)";
-						$a = $db->_sql($sql, [$_GET['q'], $ip]);
-					}
-					elseif ($_GET['r'] == 'bad') {
-						$sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating-1 WHERE id=?";
-						$a = $db->_sql($sql, [$_GET['q']]);
-						$sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES (?, ?)";
-						$a = $db->_sql($sql, [$_GET['q'], $ip]);
+				$sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes WHERE id=?";
+				$r = $db->_sql($sql, [$_GET['q']]);
+				$rows = $db->_rows($r);
+				if ($rows > 0) {
+					$sql = "SELECT ip FROM ".$_qdbs['tpfx']."votes WHERE id=? AND ip=?";
+					$a = $db->_sql($sql, [$_GET['q'], $ip]);
+					if ($db->_rows($a) < 1) {
+						if ($_GET['r'] == 'good') {
+							$sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating+1 WHERE id=?";
+							$a = $db->_sql($sql, [$_GET['q']]);
+							$sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES (?, ?)";
+							$a = $db->_sql($sql, [$_GET['q'], $ip]);
+						}
+						elseif ($_GET['r'] == 'bad') {
+							$sql = "UPDATE ".$_qdbs['tpfx']."quotes SET rating=rating-1 WHERE id=?";
+							$a = $db->_sql($sql, [$_GET['q']]);
+							$sql = "INSERT INTO ".$_qdbs['tpfx']."votes (id,ip) VALUES (?, ?)";
+							$a = $db->_sql($sql, [$_GET['q'], $ip]);
+						}
 					}
 				}
 				header("Location: ".$ref);
