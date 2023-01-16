@@ -9,7 +9,7 @@ if (!defined('INSTALLED')) {
 $sql = "SELECT * FROM ".$_qdbs['tpfx']."settings";
 $r = $db->_sql($sql);
 $row = $db->fetch_row($r);
-$sitetitle = $row['title'];
+$sitetitle = htmlentities($row['title'], ENT_XML1);
 
 $urlscheme = (isset($_SERVER['HTTPS']) ? "https" : "http");
 $urlhost = $_SERVER['HTTP_HOST'];
@@ -35,7 +35,7 @@ $content = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 
 		<pubDate>".$date."</pubDate>
 		<lastBuildDate>".$date."</lastBuildDate>
-		<generator>QdbS 1.13</generator>
+		<generator>QdbS ".QDBS_VERSION."</generator>
 		<ttl>30</ttl>";
 
 $sql = "SELECT * FROM ".$_qdbs['tpfx']."quotes ORDER BY id DESC LIMIT ".intval($pgr->limit)." OFFSET 0";

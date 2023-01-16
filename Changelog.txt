@@ -1,6 +1,8 @@
 QdbS Changelog:
 
 [ ?.?? ] - ??/??/2022 [mm/dd/yyyy]
+Fixed hard coded version in rss.php
+Fixed site title escaping in rss.php
 Changed database code to use PDO
 Fix for database type not defaulting to mysql if not set in settings.php
 Fix for install script attempting install despite field errors
